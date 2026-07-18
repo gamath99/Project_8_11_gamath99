@@ -25,11 +25,43 @@ class Toukay_game:
             self.current_player = self.player2
         else:
             self.current_player = self.player1
-            
-        
+
+    def get_player_move(self):
+        """Get the player's move (row and column)"""
+        while True:
+            try:
+                row = int(input("Enter the row (0-5): "))
+                
+
+
+                if 0 <= row < 6 :
+                    return row
+                else:
+                    print("Invalid input. Please enter valid row.")
+            except ValueError:
+                print("Invalid input. Please enter integers for row.")    
 
     def play(self):
         # Implement the main game loop here
+        while not self.game_over:
+            
+            self.board.display_board()
+
+            print(f"{self.current_player.name}'s turn."
+                  f"Score: {self.current_player.score}"
+                  )
+            row = self.get_player_move()
+            col = 0
+            if self.current_player == self.player1:
+                col = 0  # Player 1 chooses column 0
+            else:
+                col = 1  # Player 2 chooses column 1
+
+
+
+            
+
+
         pass
 
 
