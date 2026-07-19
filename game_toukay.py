@@ -8,6 +8,32 @@ but he can only capture the stones if the last distributed point drop in the 3 p
 """
 from board import Board
 from player import Player
+from save_load import save_game, load_game, save_result
+
+def start_menu(game):
+    """Allow the user to start or load a game."""
+
+    while True:
+        print("\nTOUKAY")
+        print("1. New game")
+        print("2. Load saved game")
+        print("3. Exit")
+
+        choice = input("Choose an option: ").strip()
+
+        if choice == "1":
+            return True
+
+        if choice == "2":
+            if load_game(game):
+                return True
+
+        elif choice == "3":
+            print("Goodbye.")
+            return False
+
+        else:
+            print("Choose 1, 2, or 3.")
 
 class Toukay_game:
     """Initialize the game, distribute points"""
@@ -20,6 +46,7 @@ class Toukay_game:
         self.current_player = self.player1  # Start with player 1
 
         self.last_capturing_player = None
+        self.quit_requested = False
 
 
         self.game_over = False
@@ -34,17 +61,28 @@ class Toukay_game:
     def get_player_move(self):
         """Get the player's move (row and column)"""
         while True:
+            choice = input("Enter row (0-5), S to save, or Q to quit:").strip().lower()
+
+            if choice == "s":
+                save_game(self)
+                continue
+
+            if choice == "q":
+                save_game(self)
+                self.quit_requested = True
+                print("The game was saved before exiting.")
+                self.game_over = True
+                return None
+            
             try:
-                row = int(input("Enter the row (0-5): "))
+                row = int(choice)
                 
-
-
                 if 0 <= row < 6 :
                     return row
                 else:
                     print("Invalid input. Please enter valid row.")
             except ValueError:
-                print("Invalid input. Please enter integers for row.")    
+                print("Enter a row number, S, or Q.")    
 
     def play(self):
         # Implement the main game loop here
@@ -90,6 +128,9 @@ class Toukay_game:
                 continue
             
             row = self.get_player_move()
+
+            if row is None:
+                break
             
 
             if self.board.board[row][col] == 0:
@@ -118,8 +159,8 @@ class Toukay_game:
                 self.game_over = True
             else:
                 self.switch_player()
-
-        self.show_results()
+        if not self.quit_requested:
+            self.show_results()
 
     def show_results(self):
         print("\nGame Over")
@@ -132,9 +173,14 @@ class Toukay_game:
             print("Player 2 wins!")
         else:
             print("The game is a draw.")
+
+        save_result(self)
+
                     
     
 
 if __name__ == "__main__":
     game = Toukay_game()
-    game.play()  # Start the game loop
+
+    if start_menu(game):
+        game.play()  # Start the game loop

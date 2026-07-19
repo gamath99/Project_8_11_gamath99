@@ -2,8 +2,8 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-SAVE_FILE = Path(__File__).parent / "savegame.json"
-RESULTS
+SAVE_FILE = Path(__file__).parent / "savegame.json"
+RESULTS_FILE = Path(__file__).parent / "results.txt"
 
 def save_game(game):
     """Save the current Toukay game to a JSON file."""
