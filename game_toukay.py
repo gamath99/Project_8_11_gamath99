@@ -137,8 +137,7 @@ class Toukay_game:
                 print("That cell is empty Choose another cell.")
                 continue
 
-            #last_row, last_col = self.board.distribute_stones(row, col)
-
+           
             captured_points = self.board.distribute_stones(row, col)
 
 
