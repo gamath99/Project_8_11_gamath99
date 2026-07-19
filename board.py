@@ -49,7 +49,7 @@ class Board:
         current_row = start_row
         current_col = start_col
 
-        while True
+        while True:
 
             stones = self.board[current_row][current_col]
             self.board[current_row][current_col] = 0  # Remove all stones from the selected cell
@@ -69,10 +69,17 @@ class Board:
                 if stones == 0: 
                     last_cell_was_empty = was_empty
 
+            if self.board[row][col] == 4:  # Check if the last cell has 3 stones
+                self.board[row][col] = 0  # Remove the stones from the cell
+
+                print(f"Captured 4 stones from {row}, column {col}.")
+                return 4
+
             if last_cell_was_empty:
-                return row, col  # Return the last cell where a stone was dropped          
+                return 0  # Return the last cell where a stone was dropped          
             current_row = row
             current_col = col 
+
 
           
     
