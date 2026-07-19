@@ -88,3 +88,32 @@ def load_game(game):
         print(f"Unable to load the game: {error}")
         return False
 
+def save_result(game):
+    """Append the completed game's result to results.txt."""
+
+    if game.player1.score > game.player2.score:
+        winner = game.player1.name
+
+    elif game.player2.score > game.player1.score:
+        winner = game.player2.name
+
+    else:
+        winner = "Draw"
+
+    result = (
+        "\n----------------------------------------\n"
+        f"Date: {datetime.now():%Y-%m-%d %H:%M:%S}\n"
+        f"Winner: {winner}\n"
+        f"{game.player1.name}: {game.player1.score}\n"
+        f"{game.player2.name}: {game.player2.score}\n"
+    )
+
+    try:
+        with RESULTS_FILE.open("a", encoding="utf-8") as file:
+            file.write(result)
+
+        print("Game result saved to results.txt.")
+
+    except OSError as error:
+        print(f"Unable to save the result: {error}")
+
