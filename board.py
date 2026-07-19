@@ -80,6 +80,31 @@ class Board:
             current_row = row
             current_col = col 
 
+    def legal_move(self, col):
+        """check whether the current player's column contains any stones."""
+
+        for row in range(len(self.board)):
+            if self.board[row][col] > 0:
+                return True 
+        
+        return False
+    
+    def count_remaining_stones(self):
+        """Return the total number of stones remaining on the board."""
+
+        total = 0 
+
+        for row in self.board:
+            total += sum(row)
+        
+        return total
+    
+    def clear_board(self):
+        """Remove every remaining stones from the board."""
+
+        for row in range (len(self.board)):
+            for col in range (len(self.board[row])):
+                self.board[row][col] = 0
 
           
     

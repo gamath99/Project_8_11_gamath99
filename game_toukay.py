@@ -19,6 +19,9 @@ class Toukay_game:
         
         self.current_player = self.player1  # Start with player 1
 
+        self.last_capturing_player = None
+
+
         self.game_over = False
 
     def switch_player(self):
@@ -55,12 +58,39 @@ class Toukay_game:
                   )
             print(f"{self.player2.name}: {self.player2.score}")
 
-            row = self.get_player_move()
+            #End when the entire board is empty
+            if self.board.board_empty():
+                self.game_over =True
+                break
+
+            #Determine the current player's column
             col = 0
             if self.current_player == self.player1:
                 col = 0  # Player 1 chooses column 0
             else:
                 col = 1  # Player 2 chooses column 1
+            
+            if not self.board.legal_move(col):
+                print(f"{self.current_player.name} has no legal move.")
+                remaining_stones = self.board.count_remaining_stones()
+
+                if remaining_stones == 4: 
+                    if self.last_capturing_player is None:
+                        raise RuntimeError("Four stones remain, but no capturing player was recorded.")
+                        
+                    self.last_capturing_player.add_score(4)
+                    print(f"The final stones go to {self.last_capturing_player.name}.")
+
+                    self.board.clear_board()
+                    self.game_over = True
+                    break
+                
+
+                self.switch_player()
+                continue
+            
+            row = self.get_player_move()
+            
 
             if self.board.board[row][col] == 0:
                 print("That cell is empty Choose another cell.")
@@ -73,6 +103,8 @@ class Toukay_game:
 
             if captured_points > 0 :
                 self.current_player.add_score(captured_points)
+
+                self.last_capturing_player = self.current_player
                                 
                 if self.board.board_empty():
                     self.game_over = True
@@ -96,7 +128,7 @@ class Toukay_game:
 
         if self.player1.score > self.player2.score: 
             print("Player 1 wins!")
-        elif self.player.score > self.player1.score:
+        elif self.player2.score > self.player1.score:
             print("Player 2 wins!")
         else:
             print("The game is a draw.")
